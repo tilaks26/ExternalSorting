@@ -1,6 +1,6 @@
 public class Heap
 {
-    private int[] Heap;
+    private Node[] Heap;
     private int size;
     private int maximumSize;
  
@@ -10,8 +10,12 @@ public class Heap
     {
         this.maximumSize = maximumSize;
         this.size = 0;
-        Heap = new int[this.maximumSize + 1];
-        Heap[0] = Integer.MIN_VALUE;
+        Heap = new Node[this.maximumSize + 1];
+        Node initNode = new Node();
+        initNode.setElement(0);
+        initNode.setScanner(null);
+        Heap[0] = initNode;
+        //Heap[0] = Integer.MIN_VALUE;
     }
  
     private int parentElement(int position)
@@ -40,19 +44,23 @@ public class Heap
  
     private void swapElements(int fPosition, int sPosition)
     {
-        int temp;
-        temp = Heap[fPosition];
+        Node tempNode = new Node();
+        tempNode = Heap[fPosition];
         Heap[fPosition] = Heap[sPosition];
-        Heap[sPosition] = temp;
+        Heap[sPosition] = tempNode;
     }
  
     private void buildMinHeap(int position)
     {
-        if (!isLeafElement(position))
+        System.out.println("in buidMinHEAP "+position);
+    	System.out.println("Heap[position].getElement()"+Heap[position].getElement());
+        //System.out.println("Heap[leftChildElement(position)].getElement()"+Heap[leftChildElement(position)].getElement());
+    	//System.out.println("Heap[rightChildElement(position)].getElement())"+Heap[rightChildElement(position)].getElement());
+    	if (!isLeafElement(position))
         { 
-            if ( Heap[position] > Heap[leftChildElement(position)]  || Heap[position] > Heap[rightChildElement(position)])
+            if ( Heap[position].getElement() > Heap[leftChildElement(position)].getElement()  || Heap[position].getElement() > Heap[rightChildElement(position)].getElement())
             {
-                if (Heap[leftChildElement(position)] < Heap[rightChildElement(position)])
+                if (Heap[leftChildElement(position)].getElement() < Heap[rightChildElement(position)].getElement())
                 {
                 	swapElements(position, leftChildElement(position));
                 	buildMinHeap(leftChildElement(position));
@@ -64,50 +72,73 @@ public class Heap
                 }
             }
         }
+    	
     }
- 
-    public void insertElement(int value)
+    
+    public void minHeap()
     {
-        Heap[++size] = value;
+    	System.out.println("size value"+size);
+    	//double tempsize=(size/2);
+    	/*if(size==2){
+    		System.out.println("size==2");
+    		buildMinHeap(1);
+    		return;
+    	}*/
+        for (int position = size/2; position >= 1 ; position--)
+        {	
+        	System.out.println("pos value in minHeap for loop"+position);
+        	buildMinHeap(position);
+        }
+    }
+    
+    public void insertElement(Node node)
+    {
+    	//int value = node.getElement();
+        Heap[++size] = node;
         int currentElement = size;
  
-        while (Heap[currentElement] < Heap[parentElement(currentElement)])
+        System.out.println("Curr: " +Heap[currentElement].getElement());
+        System.out.println("Par: " +Heap[parentElement(currentElement)].getElement());
+        
+        while (Heap[currentElement].getElement() < Heap[parentElement(currentElement)].getElement())
         {
         	swapElements(currentElement, parentElement(currentElement));
         	currentElement = parentElement(currentElement);
         }	
     }
  
-    public void minHeap()
+    public void reduceSize()
     {
-        for (int position = (size / 2); position >= 1 ; position--)
+    	size--;
+    }
+    
+    public void print()
+    {
+        for (int i = 1; i <= size / 2; i++ )
         {
-        	buildMinHeap(position);
-        }
+            /*System.out.print(" PARENT : " + Heap[i].getElement() + " LEFT CHILD : " + Heap[2*i].getElement() 
+                + " RIGHT CHILD :" + Heap[2 * i  + 1].getElement());
+           */ 
+        	System.out.println();
+        } 
     }
  
-    public int deleteMin()
+    public Node deleteMin()
     {
-        int deletedElement = Heap[FIRST];
-        Heap[FIRST] = Heap[size--]; 
-        buildMinHeap(FIRST);
-        return deletedElement;
-    }
- 
-    public static void main(String[] args)
-    {
-        Heap minHeap = new Heap(15);
-        minHeap.insertElement(5);
-        minHeap.insertElement(3);
-        minHeap.insertElement(13);
-        minHeap.insertElement(10);
-        minHeap.insertElement(84);
-        minHeap.insertElement(19);
-        minHeap.insertElement(6);
-        minHeap.insertElement(22);
-        minHeap.insertElement(9);
-        minHeap.minHeap();
+        Node deletedNode = Heap[FIRST];
         
-        System.out.println("The Min val is " + minHeap.deleteMin());
+        System.out.println("Delete node is"+deletedNode.getElement());
+        if(size>0)
+        {
+        	Heap[FIRST] = Heap[size--];	
+        }
+        if(size==0)
+        {
+        	deletedNode=Heap[FIRST];
+        }
+         
+        buildMinHeap(FIRST);
+        return deletedNode;
     }
+
 }
