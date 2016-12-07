@@ -338,10 +338,21 @@ public class ExternalSorting
 	
 	public static void main (String[] args) throws FileNotFoundException
 	{
+		
 		System.out.println("Reading Data...");
+		
+		double start = System.currentTimeMillis();
+		
 		readChunk();
 		mergeLists();
+		
+		double end = System.currentTimeMillis();
+		
 		System.out.println("Writing Data...");
+		
+		double totalTime = end - start;
+		
+		System.out.printf("Total time taken (in Seconds) : %.4f%n", totalTime/1e3);
 	}
 	
 }
