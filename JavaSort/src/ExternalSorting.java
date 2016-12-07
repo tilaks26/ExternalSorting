@@ -188,15 +188,15 @@ public class ExternalSorting
 			System.out.println("Init heap set up done!!");
 			int loopcount=0;
 			while(heapList.size()>=1)
-			{
-					
+			{				
 					
 				System.out.println("Loop counter"+loopcount);
 				loopcount++;
-				for(Node node:heapList){
-					System.out.println("values in heapList"+node.getElement());
-					
+				for(Node node:heapList)
+				{
+					System.out.println("values in heapList"+node.getElement());	
 				}
+				
 				if(heapList.size()==1)
 				{
 					heap.minHeap();
@@ -206,8 +206,6 @@ public class ExternalSorting
 					break;
 				}
 				
-				
-				
 				heap.minHeap();
 				heap.print();
 				
@@ -216,10 +214,12 @@ public class ExternalSorting
 				
 				writeFinal(delNode.getElement());
 				
-				//System.out.println("filepath of min node"+delNode.getScanner());
-				
 				heapList.remove(delNode);
 				
+				for (Node node : heapList)
+				{
+					System.out.println("Heap list element: "+ node.getElement());
+				}
 				
 				if(delNode.getScanner().hasNext())
 				{
@@ -239,29 +239,44 @@ public class ExternalSorting
 				}
 				else
 				{
-					Scanner newScanner = null;
+					Scanner newScanner = null;				
 					scannerlist.remove(delNode.getScanner());
+					boolean flag = false;
+					
+					for (Scanner scanner : scannerlist)
+					{
+						System.out.println("Scanner "+scanner);
+					}
 					
 					if(!scannerlist.isEmpty())
 					{
-						for(int i = 0; i<=scannerlist.size(); i++)
+						for(int i = 0; i<scannerlist.size(); i++)
 						{
 							if (scannerlist.get(i) != null)
 							{
-								newScanner=scannerlist.get(i);
-								break;
+								System.out.println("Here");
+								if (scannerlist.get(i).hasNext())
+								{
+									System.out.println("In");
+									newScanner=scannerlist.get(i);
+									System.out.println("New scanner "+ newScanner);
+									flag = true;
+									break;
+								}
 							}
-						}	
-						int element = Integer.parseInt(newScanner.next());
-						Node otherNode=new Node();
-						otherNode.setElement(element);
-						otherNode.setScanner(newScanner);
-						heapList.add(otherNode);
-						heap.insertElement(otherNode);
+						}
 						
+						if (flag == true)
+						{
+							int element = Integer.parseInt(newScanner.next());
+							Node otherNode=new Node();
+							otherNode.setElement(element);
+							otherNode.setScanner(newScanner);
+							heapList.add(otherNode);
+							heap.insertElement(otherNode);
+						}						
 						
 						System.out.println("end of file reached");
-						//System.out.println("filepath"+delNode.getScanner());
 						continue;
 					}
 					else
@@ -269,8 +284,6 @@ public class ExternalSorting
 						System.out.println("Reached here");
 						heap.reduceSize();
 					}
-					
-					
 					
 				}
 			}
